@@ -202,10 +202,12 @@ export default {
   .coffee-content,
   .teaching-content {
     justify-content: center;
+    display: flex;
+    flex-direction: column;
 
     video {
       max-width: 100%;
-      height: 80vh;
+      max-height: 80vh;
       border-radius: 5px;
     }
   }
