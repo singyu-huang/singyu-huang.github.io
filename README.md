@@ -12,7 +12,7 @@ For the best experience, please view the site using one of the following browser
 
 ## How to Use
 
-## Project setup
+### Project setup
 ```
 npm install
 ```
