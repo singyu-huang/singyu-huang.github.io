@@ -10,7 +10,9 @@ $highlight-light-color: $primary-color;
 $highlight-dark-color: #ffd700;
 
 // Font Variables
-@import url('https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Antique&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Shippori+Antique&display=swap');
 
-$font-family-chinese: 'LXGW WenKai TC', sans-serif;
-$font-family-english: fantasy, sans-serif;
+
+$font-family-chinese: 'Shippori Antique', sans-serif;
+$font-family-english: 'Bebas Neue', sans-serif;
