@@ -82,7 +82,7 @@ export default {
       }
 
       p {
-        font-size: 16px;
+        font-size: 3vmin;
         line-height: 1.5;
         margin-bottom: 10px;
         color: $text-color;
@@ -156,7 +156,7 @@ export default {
         align-items: flex-start;
 
         .image-grid {
-          width: 50vw;
+          width: 70vw;
         }
       }
     }
