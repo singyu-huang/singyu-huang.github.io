@@ -38,6 +38,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    justify-content: center;
     padding-left: 20px;
 
     .main-title {
