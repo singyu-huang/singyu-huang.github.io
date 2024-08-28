@@ -15,7 +15,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import HorizontalTimeline from './components/common/HorizontalTimeline.vue';
 import ResumeSection from './components/sections/ResumeSection.vue';
 import IntroSection from './components/sections/IntroSection.vue';
@@ -23,38 +24,30 @@ import ExperienceSection from './components/sections/ExperienceSection.vue';
 import SkillsSection from './components/sections/SkillSection.vue';
 import PortfoliosSection from './components/sections/ShowcaseSection.vue';
 
-export default {
-  name: 'App',
-  components: {
-    HorizontalTimeline,
-    ResumeSection,
-    IntroSection,
-    ExperienceSection,
-    SkillsSection,
-    PortfoliosSection
-  },
-  data() {
-    return {
-      currentSection: 1,
-      milestones: [
-        { id: 1, position: 10, label: '封面', theme: 'dark' },
-        { id: 2, position: 30, label: '關於我', theme: 'light' },
-        { id: 3, position: 50, label: '工作經歷', theme: 'light' },
-        { id: 4, position: 70, label: '技能', theme: 'dark' },
-        { id: 5, position: 90, label: '作品集', theme: 'light' }
-      ]
-    };
-  },
-  methods: {
-    updateSection(id) {
-      this.currentSection = id;
-    },
-    nextSection() {
-      this.$refs.timeline.scrollToNextMilestone();
-    },
-    previousSection() {
-      this.$refs.timeline.scrollToPreviousMilestone();
-    }
+const currentSection = ref(1);
+const milestones = ref([
+  { id: 1, position: 10, label: '封面', theme: 'dark' },
+  { id: 2, position: 30, label: '關於我', theme: 'light' },
+  { id: 3, position: 50, label: '工作經歷', theme: 'light' },
+  { id: 4, position: 70, label: '技能', theme: 'dark' },
+  { id: 5, position: 90, label: '作品集', theme: 'light' }
+]);
+
+const updateSection = (id) => {
+  currentSection.value = id;
+};
+
+const nextSection = () => {
+  const timeline = this.$refs.timeline;
+  if (timeline) {
+    timeline.scrollToNextMilestone();
+  }
+};
+
+const previousSection = () => {
+  const timeline = this.$refs.timeline;
+  if (timeline) {
+    timeline.scrollToPreviousMilestone();
   }
 };
 </script>
