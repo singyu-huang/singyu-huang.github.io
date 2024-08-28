@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+
 export default {
   props: {
     milestones: {
@@ -34,73 +36,73 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      progressWidth: 10,
-      activeMilestoneId: 1,
-      scrolling: false
-    };
-  },
-  mounted() {
-    console.log('mounted: adding wheel event listener');
-    window.addEventListener('wheel', this.onWheel, { passive: true });
-    this.updateSection();
-  },
-  beforeUnmount() {
-    console.log('beforeUnmount: removing wheel event listener');
-    window.removeEventListener('wheel', this.onWheel);
-  },
-  computed: {
-    currentTheme() {
-      const activeMilestone = this.milestones.find(m => m.id === this.activeMilestoneId);
-      return activeMilestone ? activeMilestone.theme : 'light';
-    }
-  },
-  methods: {
-    scrollToPreviousMilestone() {
-      if (this.scrolling) return;
-      this.scrolling = true;
-      const currentMilestoneIndex = this.milestones.findIndex(m => m.id === this.activeMilestoneId);
+  setup(props, { emit }) {
+    const progressWidth = ref(10);
+    const activeMilestoneId = ref(1);
+    const scrolling = ref(false);
+
+    const currentTheme = computed(() => {
+      const activeMilestone = props.milestones.find(m => m.id === activeMilestoneId.value);
+      return activeMilestone && activeMilestone.theme ? activeMilestone.theme : (props.isLightTheme ? 'light' : 'dark');
+    });
+
+    const scrollToPreviousMilestone = () => {
+      if (scrolling.value) return;
+      scrolling.value = true;
+      const currentMilestoneIndex = props.milestones.findIndex(m => m.id === activeMilestoneId.value);
       if (currentMilestoneIndex > 0) {
-        this.jumpToMilestone(this.milestones[currentMilestoneIndex - 1]);
+        jumpToMilestone(props.milestones[currentMilestoneIndex - 1]);
       } else {
-        this.scrolling = false;
+        scrolling.value = false;
       }
-    },
-    scrollToNextMilestone() {
-      if (this.scrolling) return;
-      this.scrolling = true;
-      const currentMilestoneIndex = this.milestones.findIndex(m => m.id === this.activeMilestoneId);
-      if (currentMilestoneIndex < this.milestones.length - 1) {
-        this.jumpToMilestone(this.milestones[currentMilestoneIndex + 1]);
+    };
+
+    const scrollToNextMilestone = () => {
+      if (scrolling.value) return;
+      scrolling.value = true;
+      const currentMilestoneIndex = props.milestones.findIndex(m => m.id === activeMilestoneId.value);
+      if (currentMilestoneIndex < props.milestones.length - 1) {
+        jumpToMilestone(props.milestones[currentMilestoneIndex + 1]);
       } else {
-        this.scrolling = false;
+        scrolling.value = false;
       }
-    },
-    onWheel(event) {
-      if (this.scrolling) return;
-      console.log("Wheel event detected");
+    };
+
+    const onWheel = (event) => {
+      if (scrolling.value) return;
       if (event.deltaY > 0) {
-        this.scrollToNextMilestone();
+        scrollToNextMilestone();
       } else {
-        this.scrollToPreviousMilestone();
+        scrollToPreviousMilestone();
       }
-    },
-    jumpToMilestone(milestone) {
-      this.progressWidth = milestone.position;
-      this.activeMilestoneId = milestone.id;
-      this.updateSection();
+    };
+
+    const jumpToMilestone = (milestone) => {
+      progressWidth.value = milestone.position;
+      activeMilestoneId.value = milestone.id;
+      emit('updateSection', milestone.id);
       setTimeout(() => {
-        this.scrolling = false;
+        scrolling.value = false;
       }, 300);
-    },
-    updateSection() {
-      const closestMilestone = this.milestones.reduce((prev, curr) => {
-        return Math.abs(curr.position - this.progressWidth) < Math.abs(prev.position - this.progressWidth) ? curr : prev;
-      });
-      this.activeMilestoneId = closestMilestone.id;
-      this.$emit('updateSection', closestMilestone.id);
-    }
+    };
+
+    onMounted(() => {
+      window.addEventListener('wheel', onWheel, { passive: true });
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('wheel', onWheel);
+    });
+
+    return {
+      progressWidth,
+      activeMilestoneId,
+      scrolling,
+      currentTheme,
+      scrollToPreviousMilestone,
+      scrollToNextMilestone,
+      jumpToMilestone
+    };
   }
 };
 </script>
@@ -115,44 +117,58 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   &.light {
     color: $accent-color;
+
     .timeline {
       background-color: $accent-color;
     }
+
     .progress-bar {
       background-color: $highlight-light-color;
     }
+
     .milestone::after {
       background-color: $accent-color;
     }
+
     .milestone.active::after {
       background-color: $highlight-light-color;
     }
+
     .milestone.active.current::after {
       animation: blink-light 1s infinite alternate;
     }
+
     .milestone.active .milestone-label {
       color: $highlight-light-color;
     }
   }
+
   &.dark {
     color: $accent-color;
+
     .timeline {
       background-color: $accent-color;
     }
+
     .progress-bar {
       background-color: $highlight-dark-color;
     }
+
     .milestone::after {
       background-color: $secondary-color;
     }
+
     .milestone.active::after {
       background-color: $highlight-dark-color;
     }
+
     .milestone.active.current::after {
       animation: blink-dark 1s infinite alternate;
     }
+
     .milestone.active .milestone-label {
       color: $highlight-dark-color;
     }
@@ -165,7 +181,7 @@ export default {
   cursor: pointer;
   padding: 0 10px;
   user-select: none;
-  font-family:none;
+  font-family: none;
 }
 
 .timeline-wrapper {
@@ -210,6 +226,7 @@ export default {
   0% {
     background-color: $highlight-light-color;
   }
+
   100% {
     background-color: lighten($highlight-light-color, 30%);
   }
@@ -219,6 +236,7 @@ export default {
   0% {
     background-color: $highlight-dark-color;
   }
+
   100% {
     background-color: lighten($highlight-dark-color, 30%);
   }
