@@ -5,29 +5,27 @@
         <path class="circle-bg" d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831" />
-        <path class="circle" :stroke-dasharray="`${percentage}, 100`" d="M18 2.0845
+        <path class="circle" :stroke-dasharray="`${props.percentage}, 100`" d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831" />
-        <text x="18" y="18" class="percentage">{{ percentage }}%</text>
+        <text x="18" y="18" class="percentage">{{ props.percentage }}%</text>
       </svg>
     </div>
-    <p class="skill-name">{{ label }}</p>
+    <p class="skill-name">{{ props.label }}</p>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    percentage: {
-      type: Number,
-      required: true
-    },
-    label: {
-      type: String,
-      required: true,
-    },
+<script setup>
+const props = defineProps({
+  percentage: {
+    type: Number,
+    required: true,
   },
-};
+  label: {
+    type: String,
+    required: true,
+  },
+});
 </script>
 
 <style scoped lang="scss">
@@ -38,11 +36,11 @@ export default {
   height: 100px;
 
   @media (max-width: 1024px) and (min-width: 768px) {
-    width: 15vw; // 使用 vw 單位根據螢幕寬度調整大小
+    width: 15vw;
     height: 15vw;
-    max-width: 80px; // 限制最大寬度
+    max-width: 80px;
     max-height: 80px;
-    min-width: 60px; // 限制最小寬度
+    min-width: 60px;
     min-height: 60px;
   }
 
