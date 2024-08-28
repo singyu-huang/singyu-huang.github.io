@@ -17,10 +17,15 @@
 
 </template>
 
-<script>
-export default {
-  name: 'ResumeSection',
-};
+<script setup>
+import { defineProps } from 'vue';
+
+defineProps({
+  name: {
+    type: String,
+    default: 'ResumeSection'
+  }
+});
 </script>
 
 <style lang="scss">
