@@ -9,7 +9,7 @@
       </div>
       <div class="image-content">
         <div class="image-grid">
-          <a v-for="(showcase, index) in showcase" :key="index" :href="showcase.link" target="_blank">
+          <a v-for="(showcase, index) in showcases" :key="index" :href="showcase.link" target="_blank">
             <div class="image-wrapper">
               <img :src="showcase.image" :alt="showcase.title" />
               <div class="overlay">
@@ -24,36 +24,31 @@
 </template>
 
 
-<script>
-export default {
-  name: 'ShowcaseSection',
-  data() {
-    return {
-      showcase: [
-        {
-          title: 'Codepen',
-          image: '/images/showcase/codepen.webp',
-          link: 'https://codepen.io/hanigogo'
-        },
-        {
-          title: 'deta International',
-          image: '/images/showcase/deta.png',
-          link: 'https://www.deta.com.tw/'
-        },
-        {
-          title: 'Covid19 確診者足跡地圖',
-          image: '/images/showcase/covid19.webp',
-          link: 'https://docs.google.com/presentation/d/13t6EzQWiZ6KwazDKtc6HhnB_ODEzt20hil6ThtNcMBc/edit'
-        },
-        {
-          title: 'TOCC填表追蹤機器人',
-          image: '/images/showcase/linebot.webp',
-          link: 'https://jsfiddle.net/SingYu/v1r6hks8/'
-        }
-      ]
-    };
+<script setup>
+import { ref } from 'vue';
+
+const showcases = ref([
+  {
+    title: 'Codepen',
+    image: '/images/showcase/codepen.webp',
+    link: 'https://codepen.io/hanigogo'
+  },
+  {
+    title: 'deta International',
+    image: '/images/showcase/deta.png',
+    link: 'https://www.deta.com.tw/'
+  },
+  {
+    title: 'Covid19 確診者足跡地圖',
+    image: '/images/showcase/covid19.webp',
+    link: 'https://docs.google.com/presentation/d/13t6EzQWiZ6KwazDKtc6HhnB_ODEzt20hil6ThtNcMBc/edit'
+  },
+  {
+    title: 'TOCC填表追蹤機器人',
+    image: '/images/showcase/linebot.webp',
+    link: 'https://jsfiddle.net/SingYu/v1r6hks8/'
   }
-};
+]);
 </script>
 
 <style lang="scss" scoped>
