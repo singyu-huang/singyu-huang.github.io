@@ -25,45 +25,41 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import CustomModal from '../common/CustomModal.vue';
 
-export default {
-    name: "ExperienceSection",
-    components: {
-        CustomModal
-    },
-    data() {
-        return {
-            timelineItems: [
-                { date: "2012 - 2015 年", content: "在這段時間，我作為一名軟體工程師，專注於企業內部系統的開發和維護，特別是針對生產系統和自動化流程的優化。我主要使用VB.net、Asp.net、Android、MS SQL等技術，為公司的生產線和ERP系統提供技術支持，這段經歷為我打下了堅實的技術基礎。" },
-                { date: "2015 - 2018 年", content: "這是一個技術轉型的時期，我轉向前端開發，專注於網頁應用的設計和開發。在這段時間裡，我先後加入了多家公司，負責開發響應式網站和行動服務系統，並深入掌握了HTML、AngularJS、React.js、Node.js等前端技術。同時，我也參與了多個專案，提升了我的技術能力和前端開發經驗。" },
-                { date: "2018 - 2024 年", content: "這段時間，我進入了長照領域，擔任日照中心的照顧服務員，並在多個長照單位工作。我負責策劃和執行長者的日常活動，並以此為契機深入了解長照的需求和運作模式。此外，我也參與了g0v的專案，協助開發了Covid19確診者足跡圖和員工健康管理工具，這段經歷讓我將技術與長照需求相結合。" },
-                { date: "2024 年", content: "在這段短期工作中，我擔任了專案管理師，負責推動AI和高齡賦能相關專案。在這段時間內，我主要負責與合作夥伴溝通，協調專案進度，並解決專案中的各類問題，這段經歷使我更加熟悉專案管理流程，也強化了我在AI與數位賦能領域的知識。" },
-            ],
-            selectedIndex: 0,
-            isMobileOrTablet: false,
-        };
-    },
-    mounted() {
-        this.checkDevice();
-        window.addEventListener("resize", this.checkDevice);
-    },
-    beforeUnmount() {
-        window.removeEventListener("resize", this.checkDevice);
-    },
-    methods: {
-        checkDevice() {
-            this.isMobileOrTablet = window.innerWidth <= 1024;
-        },
-        handleClick(index) {
-            this.selectedIndex = index;
-            if (this.isMobileOrTablet) {
-                this.$refs.customModal.openModal();
-            }
-        },
-    },
+const timelineItems = ref([
+    { date: "2012 - 2015 年", content: "在這段時間，我作為一名軟體工程師，專注於企業內部系統的開發和維護，特別是針對生產系統和自動化流程的優化。我主要使用VB.net、Asp.net、Android、MS SQL等技術，為公司的生產線和ERP系統提供技術支持，這段經歷為我打下了堅實的技術基礎。" },
+    { date: "2015 - 2018 年", content: "這是一個技術轉型的時期，我轉向前端開發，專注於網頁應用的設計和開發。在這段時間裡，我先後加入了多家公司，負責開發響應式網站和行動服務系統，並深入掌握了HTML、AngularJS、React.js、Node.js等前端技術。同時，我也參與了多個專案，提升了我的技術能力和前端開發經驗。" },
+    { date: "2018 - 2024 年", content: "這段時間，我進入了長照領域，擔任日照中心的照顧服務員，並在多個長照單位工作。我負責策劃和執行長者的日常活動，並以此為契機深入了解長照的需求和運作模式。此外，我也參與了g0v的專案，協助開發了Covid19確診者足跡圖和員工健康管理工具，這段經歷讓我將技術與長照需求相結合。" },
+    { date: "2024 年", content: "在這段短期工作中，我擔任了專案管理師，負責推動AI和高齡賦能相關專案。在這段時間內，我主要負責與合作夥伴溝通，協調專案進度，並解決專案中的各類問題，這段經歷使我更加熟悉專案管理流程，也強化了我在AI與數位賦能領域的知識。" },
+]);
+
+const selectedIndex = ref(0);
+const isMobileOrTablet = ref(false);
+
+const checkDevice = () => {
+    isMobileOrTablet.value = window.innerWidth <= 1024;
 };
+
+const handleClick = (index) => {
+    selectedIndex.value = index;
+    if (isMobileOrTablet.value) {
+        customModal.value.openModal();
+    }
+};
+
+const customModal = ref(null);
+
+onMounted(() => {
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener("resize", checkDevice);
+});
 </script>
 
 <style scoped lang="scss">
