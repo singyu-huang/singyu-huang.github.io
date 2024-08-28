@@ -17,46 +17,39 @@
     </section>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import CircularProgress from '../common/CircularProgress.vue';
 import ProgressBar from '../common/ProgressBar.vue';
 
-export default {
-    components: {
-        CircularProgress,
-        ProgressBar
-    },
-    data() {
-        return {
-            isMobile: window.innerWidth <= 767,
-            skills: [
-                { name: 'HTML / CSS', percentage: 80 },
-                { name: 'JavaScript', percentage: 80 },
-                { name: 'AngularJS', percentage: 60 },
-                { name: 'React.js', percentage: 50 },
-                { name: 'Node.js', percentage: 50 },
-                { name: 'Vue.js', percentage: 80 },
-                { name: 'MS SQL', percentage: 40 },
-                { name: 'Git', percentage: 80 },
-                { name: 'Bootstrap', percentage: 60 },
-                { name: 'SCSS/SASS', percentage: 70 },
-                { name: 'MS Office', percentage: 80 },
-                { name: '專案管理', percentage: 30 }
-            ]
-        };
-    },
-    mounted() {
-        window.addEventListener('resize', this.handleResize);
-    },
-    beforeUnmount() {
-        window.removeEventListener('resize', this.handleResize);
-    },
-    methods: {
-        handleResize() {
-            this.isMobile = window.innerWidth <= 767;
-        }
-    },
+const isMobile = ref(window.innerWidth <= 767);
+
+const skills = ref([
+    { name: 'HTML / CSS', percentage: 80 },
+    { name: 'JavaScript', percentage: 80 },
+    { name: 'AngularJS', percentage: 60 },
+    { name: 'React.js', percentage: 50 },
+    { name: 'Node.js', percentage: 50 },
+    { name: 'Vue.js', percentage: 80 },
+    { name: 'MS SQL', percentage: 40 },
+    { name: 'Git', percentage: 80 },
+    { name: 'Bootstrap', percentage: 60 },
+    { name: 'SCSS/SASS', percentage: 70 },
+    { name: 'MS Office', percentage: 80 },
+    { name: '專案管理', percentage: 30 }
+]);
+
+const handleResize = () => {
+    isMobile.value = window.innerWidth <= 767;
 };
+
+onMounted(() => {
+    window.addEventListener('resize', handleResize);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style scoped lang="scss">
