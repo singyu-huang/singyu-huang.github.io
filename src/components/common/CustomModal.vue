@@ -7,29 +7,31 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      isVisible: false,
-      isClosing: false,
-    };
-  },
-  methods: {
-    openModal() {
-      this.isVisible = true;
-      this.isClosing = false;
-    },
-    closeModal() {
-      this.isClosing = true;
-    },
-    handleAnimationEnd() {
-      if (this.isClosing) {
-        this.isVisible = false;
-      }
-    },
-  },
-};
+<script setup>
+import { ref } from 'vue';
+
+const isVisible = ref(false);
+const isClosing = ref(false);
+
+function openModal() {
+  isVisible.value = true;
+  isClosing.value = false;
+}
+
+function closeModal() {
+  isClosing.value = true;
+}
+
+function handleAnimationEnd() {
+  if (isClosing.value) {
+    isVisible.value = false;
+  }
+}
+
+defineExpose({
+  openModal,
+  closeModal
+});
 </script>
 
 <style lang="scss" scoped>
