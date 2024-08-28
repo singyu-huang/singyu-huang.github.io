@@ -5,18 +5,18 @@
         <path class="circle-bg" d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831" />
-        <path class="circle" :stroke-dasharray="`${props.percentage}, 100`" d="M18 2.0845
+        <path class="circle" :stroke-dasharray="`${percentage}, 100`" d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831" />
-        <text x="18" y="18" class="percentage">{{ props.percentage }}%</text>
+        <text x="18" y="18" class="percentage">{{ percentage }}%</text>
       </svg>
     </div>
-    <p class="skill-name">{{ props.label }}</p>
+    <p class="skill-name">{{ label }}</p>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   percentage: {
     type: Number,
     required: true,

@@ -8,19 +8,19 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        percentage: {
-            type: Number,
-            required: true,
-        },
-        label: {
-            type: String,
-            required: true,
-        },
+<script setup>
+import { defineProps } from 'vue';
+
+defineProps({
+    percentage: {
+        type: Number,
+        required: true,
     },
-};
+    label: {
+        type: String,
+        required: true,
+    },
+});
 </script>
 
 <style scoped lang="scss">
