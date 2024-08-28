@@ -1,15 +1,11 @@
 <template>
   <div id="app" v-touch:swipe.left="previousSection" v-touch:swipe.right="nextSection">
     <div class="main-content">
-      <transition name="fade" mode="out-in">
-        <div :key="currentSection" class="section-container">
-          <ResumeSection v-if="currentSection === 1" />
-          <IntroSection v-else-if="currentSection === 2" />
-          <ExperienceSection v-else-if="currentSection === 3" />
-          <SkillsSection v-else-if="currentSection === 4" />
-          <PortfoliosSection v-else-if="currentSection === 5" />
-        </div>
-      </transition>
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" class="section-content" />
+        </transition>
+      </router-view>
     </div>
     <HorizontalTimeline ref="timeline" :milestones="milestones" @updateSection="updateSection" />
   </div>
@@ -17,37 +13,39 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import HorizontalTimeline from './components/common/HorizontalTimeline.vue';
-import ResumeSection from './components/sections/ResumeSection.vue';
-import IntroSection from './components/sections/IntroSection.vue';
-import ExperienceSection from './components/sections/ExperienceSection.vue';
-import SkillsSection from './components/sections/SkillSection.vue';
-import PortfoliosSection from './components/sections/ShowcaseSection.vue';
 
-const currentSection = ref(1);
+const router = useRouter();
+
 const milestones = ref([
-  { id: 1, position: 10, label: '封面', theme: 'dark' },
-  { id: 2, position: 30, label: '關於我', theme: 'light' },
-  { id: 3, position: 50, label: '工作經歷', theme: 'light' },
-  { id: 4, position: 70, label: '技能', theme: 'dark' },
-  { id: 5, position: 90, label: '作品集', theme: 'light' }
+  { id: 1, position: 10, label: '封面', route: '/resume', theme: 'dark' },
+  { id: 2, position: 30, label: '關於我', route: '/intro', theme: 'light' },
+  { id: 3, position: 50, label: '工作經歷', route: '/experience', theme: 'light' },
+  { id: 4, position: 70, label: '技能', route: '/skills', theme: 'dark' },
+  { id: 5, position: 90, label: '作品集', route: '/portfolios', theme: 'light' }
 ]);
 
 const updateSection = (id) => {
-  currentSection.value = id;
+  const section = milestones.value.find(milestone => milestone.id === id);
+  if (section) {
+    router.push(section.route);
+  }
 };
 
 const nextSection = () => {
-  const timeline = this.$refs.timeline;
-  if (timeline) {
-    timeline.scrollToNextMilestone();
+  const currentRoute = router.currentRoute.value.path;
+  const currentIndex = milestones.value.findIndex(milestone => milestone.route === currentRoute);
+  if (currentIndex < milestones.value.length - 1) {
+    router.push(milestones.value[currentIndex + 1].route);
   }
 };
 
 const previousSection = () => {
-  const timeline = this.$refs.timeline;
-  if (timeline) {
-    timeline.scrollToPreviousMilestone();
+  const currentRoute = router.currentRoute.value.path;
+  const currentIndex = milestones.value.findIndex(milestone => milestone.route === currentRoute);
+  if (currentIndex > 0) {
+    router.push(milestones.value[currentIndex - 1].route);
   }
 };
 </script>
